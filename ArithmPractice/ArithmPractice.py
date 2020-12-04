@@ -51,6 +51,8 @@ class Quiz:
  
     # This button function checks if the answer entered is correct
     def checkAns(self):
+        green = "#B4EB89"
+        orange = "#F29E4C"
         try:
             ansIN = int(self.Q_ent.get())
             if self.completed == False:
@@ -63,18 +65,20 @@ class Quiz:
  
                         self.Warn_lbl["text"] = "Correct."
                         self.Ncorrect += 1
+                        self.Q_frm["bg"] = green
                     else:
                         self.Warn_lbl["text"] = f"Incorrect, the correct answer is {self.ans} remainder {rem}."
- 
+                        self.Q_frm["bg"] = orange
                 else:
  
                     if ansIN == self.ans:
  
                         self.Warn_lbl["text"] = "Correct."
                         self.Ncorrect += 1
+                        self.Q_frm["bg"] = green
                     else:
                         self.Warn_lbl["text"] = f"Incorrect, the correct answer is {self.ans}."
- 
+                        self.Q_frm["bg"] = orange
                 self.completed = True
  
  
@@ -139,6 +143,7 @@ class Quiz:
                 self.QN += 1
                 self.Progress_lbl["text"] = f"Question {self.QN} of {self.NQ}"
                 self.progress_bar["value"] = self.QN
+                self.Q_frm["bg"] = "#E7E1A6"
  
             else:
                 self.Warn_lbl["text"] = "You have not yet attempted the question."
@@ -161,7 +166,7 @@ class Quiz:
  
         ## Progress display ##
         #Container for progress display
-        self.Progress_frm = tk.Frame(self.practiceWindow, height = 100, bg = "grey")
+        self.Progress_frm = tk.Frame(self.practiceWindow, height = 100, bg = "grey",relief=tk.RAISED)
         self.Progress_frm.pack(fill = tk.BOTH)
  
         # Progress counter
@@ -194,7 +199,7 @@ class Quiz:
             self.rem_ent.pack(side=tk.LEFT)
  
  
-        self.Q_lbl = tk.Label(self.Q_frm, font = ("monaco", 50), bg = "#96D9F9")
+        self.Q_lbl = tk.Label(self.Q_frm, font = ("monaco", 50), bg = "#96D9F9",relief=tk.GROOVE,borderwidth=20)
         self.Q_lbl.grid(row = 0, column = 0, pady = 30, padx = 60)
  
         self.Warn_lbl = tk.Label(self.Q_frm, bg = "#E7E1A6")
@@ -238,7 +243,7 @@ def runMain():
     frm_body.columnconfigure(0, weight = 1, minsize = 300)
     frm_body.rowconfigure(0, weight = 1, minsize = 400)
  
-    frm_select = tk.Frame(frm_body,bg = "#D5D5D5",borderwidth = 3)
+    frm_select = tk.Frame(frm_body,bg = "#D5D5D5",relief=tk.RIDGE,borderwidth = 10)
     frm_select.pack(padx = 50, pady = 50)
  
     # Quiz parameter entry
