@@ -48,6 +48,9 @@ class Quiz:
  
         self.completed = False
         self.QuizComplete = False
+
+        self.start_time = time.time()
+        self.time_taken = 0
  
     # This button function checks if the answer entered is correct
     def checkAns(self):
@@ -122,13 +125,12 @@ class Quiz:
  
     # This button function generates a new question
     def cont(self):
- 
-        if self.QuizComplete == True:
-            self.practiceWindow.destroy()
- 
-        if self.QN >= self.NQ:
-            self.Warn_lbl["text"] = f"You have completed the quiz, your score was {self.Ncorrect}/{self.NQ}. Press continue to return to main menu."
+        
+        if self.QN == self.NQ:
+            self.Warn_lbl["text"] = f"You have completed the quiz, your score was {self.Ncorrect}/{self.NQ}. Continue to see detailed summary."
+            self.time_taken = time.time() - self.start_time
             self.QuizComplete = True
+            self.Progress_lbl["text"] = "Complete!"
  
         else:
             if self.completed == True:
@@ -147,6 +149,14 @@ class Quiz:
  
             else:
                 self.Warn_lbl["text"] = "You have not yet attempted the question."
+
+        if self.QuizComplete == True:
+            if self.QN > self.NQ:
+                self.showStats()
+            else:
+                self.QN += 200
+
+        
  
     def handle_enter(self,event):
         if self.Q_ent.get() != "":
@@ -214,11 +224,36 @@ class Quiz:
  
         # Continue with enter key
         self.practiceWindow.bind("<Key-Return>",self.handle_enter)
+
+    def showStats(self):
+        """Create widgets which display the outcomes of the quiz:
+            * Score and time taken
+            * 
+            Exit button to return to the main menu"""
+
+        self.Q_frm.destroy()
+        self.Progress_frm.destroy()
+
+        self.stat_frm = tk.Frame(self.practiceWindow)
+        self.stat_frm.pack(fill=tk.BOTH)
+
+        self.time_lbl = tk.Label(self.stat_frm, text = f"You completed {self.NQ} questions of {self.operation} with the highest number {self.HN} in "+"{:.2f} seconds.".format(self.time_taken))
+        self.time_lbl.pack()
+
+        self.score_lbl = tk.Label(self.stat_frm, text = f"Your accuracy is: {self.NQ}/{self.Ncorrect} or {int(self.NQ/self.Ncorrect*100)}%")
+        self.score_lbl.pack()
+
  
     def runPractice(self):
         self.practiceWindow.mainloop()
         runMain()
  
+
+
+
+
+
+
 def runMain():
  
     # Create window
