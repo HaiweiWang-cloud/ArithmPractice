@@ -231,16 +231,19 @@ class Quiz:
             * 
             Exit button to return to the main menu"""
 
+        minutes = m.floor(self.time_taken/60)
+        seconds = m.floor(self.time_taken - 60*minutes)
+
         self.Q_frm.destroy()
         self.Progress_frm.destroy()
 
         self.stat_frm = tk.Frame(self.practiceWindow)
         self.stat_frm.pack(fill=tk.BOTH)
 
-        self.time_lbl = tk.Label(self.stat_frm, text = f"You completed {self.NQ} questions of {self.operation} with the highest number {self.HN} in "+"{:.2f} seconds.".format(self.time_taken))
+        self.time_lbl = tk.Label(self.stat_frm, text = f"You completed {self.NQ} questions of {self.operation} with the highest number {self.HN} in {minutes} minutes and {seconds} seconds.")
         self.time_lbl.pack()
 
-        self.score_lbl = tk.Label(self.stat_frm, text = f"Your accuracy is: {self.NQ}/{self.Ncorrect} or {int(self.NQ/self.Ncorrect*100)}%")
+        self.score_lbl = tk.Label(self.stat_frm, text = f"Your accuracy is: {self.Ncorrect}/{self.NQ} or {int(self.Ncorrect/self.NQ*100)}%")
         self.score_lbl.pack()
 
  
@@ -251,7 +254,7 @@ class Quiz:
 
 
 
-
+## Create the main menu
 
 
 def runMain():
