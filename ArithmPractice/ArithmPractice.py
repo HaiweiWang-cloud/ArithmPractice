@@ -20,6 +20,7 @@ class mainWindow:
     def __init__(self):
 
         self.createWidgets()
+        self.runMain()
        
     def runMain(self):
         self.root.mainloop()
@@ -170,7 +171,7 @@ class mainWindow:
                         # Set the timer on the quiz
                         Q.setTimer(mins,secs)
                         
-                    self.root.destroy()
+                    #self.root.destroy()
                     Q.runPractice()
 
                     
@@ -446,12 +447,11 @@ class Quiz:
             pass
 
         self.practiceWindow.mainloop()
-        createMainWindow()
+        
 
 
 def createMainWindow():
     window = mainWindow()
-    window.runMain()
     
 createMainWindow()
 
