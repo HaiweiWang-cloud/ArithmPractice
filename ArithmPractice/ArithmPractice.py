@@ -13,18 +13,171 @@ tk.GROOVE
 tk.RIDGE
 """
  
-class Timer:
-    def __init(self,countdown_duration):
-        self.start_time = time.time()
-        self.current_time = self.start_time
-        self.duration = countdown_duration
-    def get_time_elapsed(self):
-        self.current_time = time.time()
-        return self.current_time - self.start_time
-    def is_ended(self):
-        return self.get_time_elapsed() >= self.duration
+## Create the main menu
+
+class mainWindow:
+
+    def __init__(self):
+
+        self.createWidgets()
+       
+    def runMain(self):
+        self.root.mainloop()
+
+    def createWidgets(self):
+
+        # Create window
+        self.root = tk.Tk()
+        self.root.title("ArithmPractice")
+ 
+        # Widgets
+ 
+        self.root.columnconfigure(0, weight = 1, minsize = 900)
+        self.root.rowconfigure(1, weight = 1, minsize = 50)
+ 
+        #Title
+        self.frm_title = tk.Frame(self.root, height=600, relief = tk.RAISED, borderwidth = 6, bg = "#94DFEF")
+        self.frm_title.grid(row=0,column=0,sticky="new")
+        self.txt_title = tk.Label(self.frm_title, text = "Welcome to ArithmPractice!", font = ("Copperplate",44),bg = "#94DFEF")
+        self.txt_title.pack(pady = 10)
+ 
+        #Selection pane to choose operation to practice
+        self.frm_body = tk.Frame(self.root,relief = tk.GROOVE, borderwidth = 9)
+        self.frm_body.grid(row=1,column=0, sticky = "nsew")
+ 
+        self.frm_body.columnconfigure(0, weight = 1, minsize = 300)
+        self.frm_body.rowconfigure(0, weight = 1, minsize = 400)
+ 
+        self.frm_select = tk.Frame(self.frm_body,bg = "#D5D5D5",relief=tk.RIDGE,borderwidth = 10)
+        self.frm_select.pack(padx = 50, pady = 50)
+ 
+        # Quiz parameter entry
+        self.NQ_frm = tk.Entry(self.frm_select)
+        self.NQ_frm.pack(padx = 20, pady = 20)
+        self.NQ_lbl = tk.Label(self.NQ_frm, text = "Enter the number of questions to do:")
+        self.NQ_lbl.grid(row=0,column=0)
+        self.NQ_ent = tk.Entry(self.NQ_frm)
+        self.NQ_ent.grid(row = 0, column = 1)
+        self.NQ_ent.insert(0,"20")
+        self.HN_lbl = tk.Label(self.NQ_frm,text="Enter the Highest Number:")
+        self.HN_lbl.grid(row = 1, column = 0)
+        self.HN_ent = tk.Entry(self.NQ_frm)
+        self.HN_ent.insert(0,"100")
+        self.HN_ent.grid(row = 1, column = 1)
+ 
+        def minIncrease():
+            return
+        def minDecrease():
+            return
+        def secIncrease():
+            return
+        def secDecrease():
+            return
+ 
+        self.frm_timer = tk.Frame(self.NQ_frm)
+        self.frm_timer.grid(row = 2, column = 1)
+        self.Timer_lbl = tk.Label(self.frm_timer,text = "Timer")
+        self.Timer_lbl.grid(row = 0, column = 0)
+        self.timer_enable = tk.IntVar()
+        self.timer_enable.set(0)
+        self.Check_timer = tk.Checkbutton(self.frm_timer,variable = self.timer_enable, onvalue = 1, offvalue = 0)
+        self.Check_timer.grid(row = 0, column = 1)
+        self.Min_increase = tk.Button(self.frm_timer, command = minIncrease,text= u"\u2191")
+        self.Min_increase.grid(row = 0, column = 2)
+        self.Min_decrease = tk.Button(self.frm_timer, command = minDecrease,text=u"\u2193")
+        self.Min_decrease.grid(row = 0, column = 4)
+        self.min_ent = tk.Entry(self.frm_timer)
+        self.min_ent.grid(row = 0, column = 3)
+        self.min_ent.insert(0,"1")
+        self.sec_increase = tk.Button(self.frm_timer, command = secIncrease,text= u"\u2191")
+        self.sec_increase.grid(row = 0, column = 5)
+        self.sec_ent = tk.Entry(self.frm_timer)
+        self.sec_ent.grid(row = 0, column = 6)
+        self.sec_ent.insert(0,"0")
+        self.sec_decrease = tk.Button(self.frm_timer, command = secDecrease,text=u"\u2193")
+        self.sec_decrease.grid(row = 0, column = 7)
  
  
+        self.select_lbl = tk.Label(self.frm_select, text = "What do you want to practice?",bg = "#D5D5D5")
+        self.select_lbl.pack(fill = tk.Y, side = "top",padx = 20, pady = 20)
+ 
+        self.options_lstbox = tk.Listbox(self.frm_select, selectmode = "SINGLE")
+        self.options_lstbox.insert(1,"Addition")
+        self.options_lstbox.insert(2,"Subtraction")
+        self.options_lstbox.insert(3,"Multiplication")
+        self.options_lstbox.insert(4,"Division")
+        self.options_lstbox.pack(pady = 10)
+ 
+        self.go_frm = tk.Frame(self.frm_select,bg = "#D5D5D5")
+        self.go_frm.pack()
+ 
+        self.msg_lbl = tk.Label(self.go_frm, bg = "#D5D5D5")
+        self.msg_lbl.grid(row = 1, column = 0)
+ 
+        self.go_btn = tk.Button(self.go_frm,text = "Go",command=self.pressgo, bg = "#74DF63")
+        self.go_btn.grid(row = 0, column = 0)
+
+    ## Below are the commands used in the GUI
+
+    def pressgo(self):
+        """Adds functionality to the Go button"""
+        NQentry = self.NQ_ent.get()
+        HNentry = self.HN_ent.get()
+        option_selected = tk.IntVar()
+        option_selected = self.options_lstbox.curselection()
+        try:
+            # Get the parameters for the quiz
+            N_questions = int(NQentry)
+            HN = int(HNentry)
+            yesGo = False
+            if N_questions <= 0 or HN <= 0:
+                raise ValueError
+            else:
+                if option_selected == ():
+                    self.msg_lbl["text"] = "Select an option"
+ 
+                elif option_selected == (0,):
+                    
+                    Q = Quiz("Addition",N_questions,HN)
+                    yesGo = True
+ 
+                elif option_selected == (1,):
+                    
+                    Q = Quiz("Subtraction",N_questions,HN)
+                    yesGo = True
+ 
+                elif option_selected == (2,):
+                    
+                    Q = Quiz("Multiplication",N_questions,HN)
+                    yesGo = True
+ 
+                elif option_selected == (3,):
+                    
+                    Q = Quiz("Division",N_questions,HN)
+                    yesGo = True
+
+                else:
+                    self.msg_lbl["text"] = "This is not available yet"
+
+                if yesGo == True:
+
+                    #Check if the timer option is enabled
+                   
+                    if self.timer_enable.get() == 1:
+                        #Get timer parameters
+                        mins = int(self.min_ent.get())
+                        secs = int(self.sec_ent.get())
+                        # Set the timer on the quiz
+                        Q.setTimer(mins,secs)
+                        
+                    self.root.destroy()
+                    Q.runPractice()
+
+                    
+        except:
+            self.msg_lbl["text"] = "Invalid entries."
+
+
 class Quiz:
     def __init__(self,operation,NQ,HN):
  
@@ -56,6 +209,11 @@ class Quiz:
     def checkAns(self):
         green = "#B4EB89"
         orange = "#F29E4C"
+
+        if self.QuizComplete == True:
+            self.Warn_lbl["text"] = "The quiz is complete, please press continue."
+            return
+
         try:
             ansIN = int(self.Q_ent.get())
             if self.completed == False:
@@ -91,6 +249,8 @@ class Quiz:
         except ValueError:
             self.Warn_lbl["text"] = "Invalid input, please try again."
             self.Q_ent.delete(0,tk.END)
+
+
  
     def generateQuestion(self):
  
@@ -156,8 +316,6 @@ class Quiz:
             else:
                 self.QN += 200
 
-        
- 
     def handle_enter(self,event):
         if self.Q_ent.get() != "":
             if self.completed == True:
@@ -225,6 +383,39 @@ class Quiz:
         # Continue with enter key
         self.practiceWindow.bind("<Key-Return>",self.handle_enter)
 
+    def setTimer(self,minutes,seconds):
+
+        #Create the timer widget under the progress frame
+
+        self.mins_rem = minutes
+        self.secs_rem = seconds
+        
+        self.time_lbl = tk.Label(self.Progress_frm,text = f"Time remaining: {self.mins_rem:02d} : {self.secs_rem:02d}")
+        self.time_lbl.grid(row=0,column=2)
+        
+
+    def updateTime(self):
+
+        try:
+            if self.secs_rem == 0 and self.mins_rem == 0 or self.QuizComplete == True:
+                self.QuizComplete == True
+                return
+
+            if self.secs_rem <= 0:
+                self.mins_rem -= 1
+                self.secs_rem = 60
+        
+            self.secs_rem -= 1
+
+            self.time_lbl["text"] = f"Time remaining: {self.mins_rem:02d} : {self.secs_rem:02d}"
+
+            self.practiceWindow.after(1000,self.updateTime)
+
+        except:
+            return
+
+         
+
     def showStats(self):
         """Create widgets which display the outcomes of the quiz:
             * Score and time taken
@@ -248,145 +439,19 @@ class Quiz:
 
  
     def runPractice(self):
-        self.practiceWindow.mainloop()
-        runMain()
- 
 
-
-
-## Create the main menu
-
-
-def runMain():
- 
-    # Create window
-    root = tk.Tk()
-    root.title("ArithmPractice")
- 
-    # Widgets
- 
-    root.columnconfigure(0, weight = 1, minsize = 900)
-    root.rowconfigure(1, weight = 1, minsize = 50)
- 
-    #Title
-    frm_title = tk.Frame(root, height=600, relief = tk.RAISED, borderwidth = 6, bg = "#94DFEF")
-    frm_title.grid(row=0,column=0,sticky="new")
-    txt_title = tk.Label(frm_title, text = "Welcome to ArithmPractice!", font = ("Copperplate",44),bg = "#94DFEF")
-    txt_title.pack(pady = 10)
- 
-    #Selection pane to choose operation to practice
-    frm_body = tk.Frame(root,relief = tk.GROOVE, borderwidth = 9)
-    frm_body.grid(row=1,column=0, sticky = "nsew")
- 
-    frm_body.columnconfigure(0, weight = 1, minsize = 300)
-    frm_body.rowconfigure(0, weight = 1, minsize = 400)
- 
-    frm_select = tk.Frame(frm_body,bg = "#D5D5D5",relief=tk.RIDGE,borderwidth = 10)
-    frm_select.pack(padx = 50, pady = 50)
- 
-    # Quiz parameter entry
-    NQ_frm = tk.Entry(frm_select)
-    NQ_frm.pack(padx = 20, pady = 20)
-    NQ_lbl = tk.Label(NQ_frm, text = "Enter the number of questions to do:")
-    NQ_lbl.grid(row=0,column=0)
-    NQ_ent = tk.Entry(NQ_frm)
-    NQ_ent.grid(row = 0, column = 1)
-    NQ_ent.insert(0,"20")
-    HN_lbl = tk.Label(NQ_frm,text="Enter the Highest Number:")
-    HN_lbl.grid(row = 1, column = 0)
-    HN_ent = tk.Entry(NQ_frm)
-    HN_ent.insert(0,"100")
-    HN_ent.grid(row = 1, column = 1)
- 
-    def minIncrease():
-        return
-    def minDecrease():
-        return
-    def secIncrease():
-        return
-    def secDecrease():
-        return
- 
-    frm_timer = tk.Frame(NQ_frm)
-    frm_timer.grid(row = 2, column = 1)
-    Timer_lbl = tk.Label(frm_timer,text = "Timer")
-    Timer_lbl.grid(row = 0, column = 0)
-    Check_timer = tk.Checkbutton(frm_timer)
-    Check_timer.grid(row = 0, column = 1)
-    Min_increase = tk.Button(frm_timer, command = minIncrease,text= u"\u2191")
-    Min_increase.grid(row = 0, column = 2)
-    Min_decrease = tk.Button(frm_timer, command = minDecrease,text=u"\u2193")
-    Min_decrease.grid(row = 0, column = 4)
-    min_ent = tk.Entry(frm_timer,width = 2)
-    min_ent.grid(row = 0, column = 3)
-    min_ent.insert(0,"1")
-    sec_increase = tk.Button(frm_timer, command = secIncrease,text= u"\u2191")
-    sec_increase.grid(row = 0, column = 5)
-    sec_ent = tk.Entry(frm_timer,width = 2)
-    sec_ent.grid(row = 0, column = 6)
-    sec_ent.insert(0,"0")
-    sec_decrease = tk.Button(frm_timer, command = secDecrease,text=u"\u2193")
-    sec_decrease.grid(row = 0, column = 7)
- 
- 
-    select_lbl = tk.Label(frm_select, text = "What do you want to practice?",bg = "#D5D5D5")
-    select_lbl.pack(fill = tk.Y, side = "top",padx = 20, pady = 20)
- 
-    options_lstbox = tk.Listbox(frm_select, selectmode = "SINGLE")
-    options_lstbox.insert(1,"Addition")
-    options_lstbox.insert(2,"Subtraction")
-    options_lstbox.insert(3,"Multiplication")
-    options_lstbox.insert(4,"Division")
-    options_lstbox.pack(pady = 10)
- 
-    go_frm = tk.Frame(frm_select,bg = "#D5D5D5")
-    go_frm.pack()
- 
-    msg_lbl = tk.Label(go_frm, bg = "#D5D5D5")
-    msg_lbl.grid(row = 1, column = 0)
- 
-    def pressgo():
-        NQentry = NQ_ent.get()
-        HNentry = HN_ent.get()
-        option_selected = tk.IntVar()
-        option_selected = options_lstbox.curselection()
         try:
-            N_questions = int(NQentry)
-            HN = int(HNentry)
-            if N_questions <= 0 or HN <= 0:
-                raise ValueError
-            else:
-                if option_selected == ():
-                    msg_lbl["text"] = "Select an option"
- 
-                elif option_selected == (0,):
-                    root.destroy()
-                    Q = Quiz("Addition",N_questions,HN)
-                    Q.runPractice()
- 
-                elif option_selected == (1,):
-                    root.destroy()
-                    Q = Quiz("Subtraction",N_questions,HN)
-                    Q.runPractice()
- 
-                elif option_selected == (2,):
-                    root.destroy()
-                    Q = Quiz("Multiplication",N_questions,HN)
-                    Q.runPractice()
- 
-                elif option_selected == (3,):
-                    root.destroy()
-                    Q = Quiz("Division",N_questions,HN)
-                    Q.runPractice()
-                else:
-                    msg_lbl["text"] = "This is not available yet"
+            self.practiceWindow.after(1000,self.updateTime)
         except:
-            msg_lbl["text"] = "Invalid entries."
- 
- 
-    go_btn = tk.Button(go_frm,text = "Go",command=pressgo, bg = "#74DF63")
-    go_btn.grid(row = 0, column = 0)
- 
-    root.mainloop()
- 
-runMain()
+            pass
+
+        self.practiceWindow.mainloop()
+        createMainWindow()
+
+
+def createMainWindow():
+    window = mainWindow()
+    window.runMain()
+    
+createMainWindow()
+
