@@ -408,9 +408,9 @@ class Quiz:
             self.secs_rem -= 1
 
             self.time_lbl["text"] = f"Time remaining: {self.mins_rem:02d} : {self.secs_rem:02d}"
-
+            """
             self.practiceWindow.after(1000,self.updateTime)
-
+            """
         except:
             return
 
