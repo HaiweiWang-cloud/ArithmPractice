@@ -436,6 +436,7 @@ class Quiz:
                 self.QuizComplete = True
                 self.completed = True
                 self.submit_btn.destroy()
+                self.Warn_lbl["text"] = "You ran out of time! : ( Press continue to see your results."
                 return
 
             if self.secs_rem <= 0:
