@@ -321,7 +321,7 @@ class Quiz:
     # This button function generates a new question
     def cont(self):
         
-        if self.QN == self.NQ:
+        if self.QN == self.NQ or self.QuizComplete == True:
             self.Warn_lbl["text"] = f"You have completed the quiz, your score was {self.Ncorrect}/{self.NQ}. Continue to see detailed summary."
             self.time_taken = time.time() - self.start_time
             self.QuizComplete = True
@@ -432,8 +432,10 @@ class Quiz:
     def updateTime(self):
 
         try:
-            if self.secs_rem == 0 and self.mins_rem == 0 or self.QuizComplete == True:
-                self.QuizComplete == True
+            if self.secs_rem == 0 and self.mins_rem == 0:
+                self.QuizComplete = True
+                self.completed = True
+                self.submit_btn.destroy()
                 return
 
             if self.secs_rem <= 0:
