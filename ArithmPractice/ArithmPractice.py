@@ -65,15 +65,47 @@ class mainWindow:
         self.HN_ent = tk.Entry(self.NQ_frm)
         self.HN_ent.insert(0,"100")
         self.HN_ent.grid(row = 1, column = 1)
- 
+        
+        # Commands to increase or decrease time
         def minIncrease():
-            return
+            try:
+                current_val = int(self.min_ent.get())
+            except:
+                self.min_ent.delete(0,tk.END)
+                self.min_ent.insert(0,"0")
+                return
+            self.min_ent.delete(0,tk.END)
+            self.min_ent.insert(0,f"{current_val + 1}")
+
         def minDecrease():
-            return
+            try:
+                current_val = int(self.min_ent.get())
+            except:
+                self.min_ent.delete(0,tk.END)
+                self.min_ent.insert(0,"0")
+                return
+            self.min_ent.delete(0,tk.END)
+            self.min_ent.insert(0,f"{current_val - 1}")
+       
         def secIncrease():
-            return
+            try:
+                current_val = int(self.sec_ent.get())
+            except ValueError:
+                self.sec_ent.delete(0,tk.END)
+                self.sec_ent.insert(0,"0")
+                return
+            self.sec_ent.delete(0,tk.END)
+            self.sec_ent.insert(0,f"{(current_val + 15)%60}") # The seconds entry will cycle from 0 to 60
+
         def secDecrease():
-            return
+            try:
+                current_val = int(self.sec_ent.get())
+            except ValueError:
+                self.sec_ent.delete(0,tk.END)
+                self.sec_ent.insert(0,"0")
+                return
+            self.sec_ent.delete(0,tk.END)
+            self.sec_ent.insert(0,f"{(current_val - 15)%60}")
  
         self.frm_timer = tk.Frame(self.NQ_frm)
         self.frm_timer.grid(row = 2, column = 1)
@@ -131,7 +163,11 @@ class mainWindow:
             N_questions = int(NQentry)
             HN = int(HNentry)
             yesGo = False
-            if N_questions <= 0 or HN <= 0:
+            #Get timer parameters
+            mins = int(self.min_ent.get())
+            secs = int(self.sec_ent.get())
+          
+            if N_questions <= 0 or HN <= 0 or mins < 0 or secs < 0:
                 raise ValueError
             else:
                 if option_selected == ():
@@ -165,9 +201,7 @@ class mainWindow:
                     #Check if the timer option is enabled
                    
                     if self.timer_enable.get() == 1:
-                        #Get timer parameters
-                        mins = int(self.min_ent.get())
-                        secs = int(self.sec_ent.get())
+                
                         # Set the timer on the quiz
                         Q.setTimer(mins,secs)
                         
