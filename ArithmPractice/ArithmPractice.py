@@ -139,6 +139,7 @@ class mainWindow:
         self.options_lstbox.insert(2,"Subtraction")
         self.options_lstbox.insert(3,"Multiplication")
         self.options_lstbox.insert(4,"Division")
+        self.options_lstbox.insert(5,"Division small numbers")
         self.options_lstbox.pack(pady = 10)
  
         self.go_frm = tk.Frame(self.frm_select,bg = "#D5D5D5")
@@ -193,6 +194,10 @@ class mainWindow:
                     Q = Quiz("Division",N_questions,HN)
                     yesGo = True
 
+                elif option_selected == (4,):
+                    Q = Quiz("Division1",N_questions,HN)
+                    yesGo = True
+
                 else:
                     self.msg_lbl["text"] = "This is not available yet"
 
@@ -217,17 +222,23 @@ class Quiz:
     def __init__(self,operation,NQ,HN):
  
         self.HN = HN
+        self.HN1 = HN
         self.LN = 1
         self.NQ = NQ
         self.QN = 1
         self.Ncorrect = 0
  
         self.operation = operation
+
+        if self.operation == "Division1":
+            self.HN1 = 10
+            self.operation = "Division"
  
         self.operation_dict = {"Addition":"+","Subtraction":"-","Multiplication":"x","Division":"/"}
  
         if self.operation == "Division":
             self.createWidgetsMain(isDivision=True)
+            
         else:
             self.createWidgetsMain()
  
@@ -290,7 +301,7 @@ class Quiz:
     def generateQuestion(self):
  
         num1 = rn.randint(self.LN,self.HN)
-        num2 = rn.randint(self.LN,self.HN)
+        num2 = rn.randint(self.LN,self.HN1)
  
  
         if self.operation == "Addition":
